@@ -37,12 +37,9 @@ done
 eval set -- "$PARAMS"
 
 if [ $RESET -eq "1" ]; then
-    rm -rf build/ generated/ subgraph.yaml
+    rm -rf build/ generated/ 
     CODE_GEN="1"
 fi
-
-# Prepare subgraph (--network)
-yarn prepare:$NETWORK
 
 # Generate code
 if [ $CODE_GEN -eq "1" ]; then
@@ -50,7 +47,6 @@ if [ $CODE_GEN -eq "1" ]; then
 fi
 
 # Build
-graph build
-
+graph build --network $NETWORK
 
 echo "success!"

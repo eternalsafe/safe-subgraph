@@ -5,17 +5,17 @@ This Subgraph dynamically tracks activity on any Safe{Wallet} deployed through t
 
 ### Subgraphs
 
-All networks which are supported by Eternal Safe and The Graph network are supported by this subgraph.
+All networks which are supported by Eternal Safe and The Graph network are supported by this subgraph. For any CLI parameters, you must use the network name as defined in parentheses below.
 
-- Mainnet: TODO
-- Gnosis Chain: TODO
-- Polygon: TODO
-- BNB Chain: TODO
-- Arbitrum: TODO
-- Optimism: TODO
-- Base: TODO
-- Celo: TODO
-- Avalanche: TODO
+- Mainnet (`mainnet`): TODO
+- Gnosis Chain (`gnosis`): TODO
+- Polygon (`matic`): TODO
+- BNB Chain (`bsc`): TODO
+- Arbitrum (`arbitrum`): TODO
+- Optimism (`optimism`): TODO
+- Base (`base`): TODO
+- Celo (`celo`): TODO
+- Avalanche (`avalanche`): TODO
 
 As of writing, the following networks are not supported by the [decentralized network](https://thegraph.com/docs/en/developing/supported-networks/):
 - Polygon zkEVM
@@ -43,23 +43,22 @@ $ yarn install
 Build
 
 ```
-$ ./script/build.sh [--reset] [--code-gen] [--network mainnet|ropsten|kovan|goerli|mumbai|polygon]
+$ ./script/build.sh [--reset] [--code-gen] [--network (from above list)]
 ```
 
 - `--reset -r` deletes the build and generated code folders [optional, default: false]
 - `--code-gen -c` (re)generate code from schema [optional, default: false]
-- `--network -n` select a target network (mainnet, ropsten, kovan, goerli, mumbai, polygon) [optional, default: mainnet]
+- `--network -n` select a target network (from the above list) [optional, default: mainnet]
 
 
 ## Deployment
 
 ```
-$ ./script/deploy.sh [--network mainnet|ropsten|kovan|goerli|mumbai|polygon] [--local] [--access-token xxxxxxxxxxxx] [--product studio]
+$ ./script/deploy.sh [--network (from above list)] [--access-token xxxxxxxxxxxx]
 ```
 
-- `--network -n` select a target network (mainnet, ropsten, kovan, goerli, mumbai, polygon) [optional, default: mainnet]
+- `--network -n` select a target network (from above list) [optional, default: mainnet]
 - `--access-token -t` access token to deploy the subgraph [optional, default: env variable $THEGRAPH_ACCESS_TOKEN]
-- `--product -p` select a target TheGraph product (studio, hosted-service) [optional, default: studio]
 
 
 ## Model

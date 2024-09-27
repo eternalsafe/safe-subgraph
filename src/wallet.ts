@@ -153,10 +153,7 @@ function addTransactionToWallet(wallet: Wallet, transaction: Transaction): Walle
     return wallet
 }
 
-export function handleTransaction(walletAddr: Address, hash: Bytes, to: Address, value: BigInt, data: Bytes, operation: i32,
-    safeTxGas: BigInt, baseGas: BigInt, gasPrice: BigInt,  gasToken: Address, refundReceiver: Address, 
-    signatures: Bytes): void {
-
+export function handleTransaction(walletAddr: Address, hash: Bytes, to: Address, value: BigInt, data: Bytes, operation: i32, safeTxGas: BigInt, baseGas: BigInt, gasPrice: BigInt,  gasToken: Address, refundReceiver: Address, signatures: Bytes): void {
     let wallet = Wallet.load(walletAddr.toHex())
 
     let walletInstance = GnosisSafe.bind(walletAddr)
@@ -181,9 +178,8 @@ export function handleTransaction(walletAddr: Address, hash: Bytes, to: Address,
         if(data.length < 2700) { // max size of a column. In some very rare cases, the method data bytecode is very long 
             transaction.data = data
         } else {
-            log.warning("wallet: {} transaction {} - cannot store transaction.data (too long), length: {}", 
-                        [walletAddr.toHexString(), hash.toHexString(), ByteArray.fromI32(data.length).toHexString()])
-        }        
+            log.warning("handleTransaction::wallet: {} transaction {} - cannot store transaction.data (too long), length: {}", [walletAddr.toHexString(), hash.toHexString(), ByteArray.fromI32(data.length).toHexString()])
+        }
         transaction.value = value
         transaction.destination = to
         transaction.signatures = signatures
