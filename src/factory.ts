@@ -12,8 +12,6 @@ import {
 } from "@graphprotocol/graph-ts";
 import { zeroBigInt } from "./utils";
 
-const safeToSkip: String[] = ["0x4826e4ddeee65bc27034602a6050486fbe920707"];
-
 function handleProxyCreation(
   proxyAddress: Address,
   masterCopyAddress: Address | null,
@@ -25,7 +23,6 @@ function handleProxyCreation(
   let callGetOwnerResult = safeInstance.try_getOwners();
   
   if (!callGetOwnerResult.reverted) {
-    if (!safeToSkip.includes(walletAddr.toHex().toLowerCase())) {
       let wallet = new Wallet(walletAddr.toHex());
       wallet.creator = event.transaction.from;
       wallet.network = dataSource.network();
@@ -40,19 +37,13 @@ function handleProxyCreation(
       wallet.transactions = [];
       wallet.save();
 
-      // Instanciate a new datasource
+      // Instantiate a new datasource for the Safe{Wallet}
       GnosisSafeContract.create(walletAddr);
-
-    } else {
-      log.warning("Skip Wallet {}", [
-        walletAddr.toHexString(),
-      ]);
-    }
   } else {
-    // A wallet can be instanciated from the proxy with incorrect setup values
+    // A wallet can be instantiated from the proxy with incorrect setup values
     // The wallet is still deployed but unusable
     // e.g https://etherscan.io/tx/0x087226bfdc7d5ff7e64fec3f4fc87522986213265fa835f22208cae83b9259a8#eventlog
-    log.warning("Wallet {} is incorrect (tx: {})", [
+    log.warning("handleProxyCreation::Wallet {} is incorrect (tx: {})", [
       walletAddr.toHexString(),
       event.transaction.hash.toHexString(),
     ]);
