@@ -1,7 +1,7 @@
 
 # Safe subgraph
 
-This Subgraph dynamically tracks activity on any Safe{Wallet} deployed through the factory (current support for versions 1.1.1, 1.3.0, 1.4.0 and 1.4.1)
+This Subgraph dynamically tracks activity on any Safe{Wallet} deployed through the factory (current support for versions 1.1.1, 1.3.0, 1.4.0 and 1.4.1).
 
 ### Subgraphs
 
@@ -61,12 +61,12 @@ $ graph test -d
 ## Deployment
 
 ```
-$ ./script/deploy.sh [--network (from above list)] [--access-token xxxxxxxxxxxx]
+$ ./script/deploy.sh [--network (from above list)] [--access-token xxxxxxxxxxxx] [--debug xxxxxxxxxxxx]
 ```
 
 - `--network -n` select a target network (from above list) [optional, default: mainnet]
-- `--access-token -t` access token to deploy the subgraph [optional, default: env variable $THEGRAPH_ACCESS_TOKEN]
-
+- `--access-token -a` access token to deploy the subgraph [optional, default: env variable $THEGRAPH_ACCESS_TOKEN]
+- `--debug -d` ID of a remote subgraph which will be [used to seed the new subgraph](https://thegraph.com/docs/en/cookbook/subgraph-debug-forking/) [optional, default: none]
 
 ## Model
 
