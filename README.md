@@ -50,6 +50,13 @@ $ ./script/build.sh [--reset] [--code-gen] [--network (from above list)]
 - `--code-gen -c` (re)generate code from schema [optional, default: false]
 - `--network -n` select a target network (from the above list) [optional, default: mainnet]
 
+## Testing
+
+Requires [Docker](https://docs.docker.com/get-docker/) to be installed.
+
+```
+$ graph test -d
+```
 
 ## Deployment
 
