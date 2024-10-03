@@ -1,0 +1,3 @@
+ - Add all other networks
+ - Add Safe 1.4.x support
+ - Merge L1 and L2 subgraphs, we should be able to just index the event and method data and decide between them

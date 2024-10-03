@@ -72,6 +72,8 @@ $ ./script/deploy.sh [--network (from above list)] [--access-token xxxxxxxxxxxx]
 
 - Wallet
     -  Transaction
+- WalletL2 (needed as a separate entity to support SafeL2 events)
+    -  Transaction
 
 ## Query samples
 

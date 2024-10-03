@@ -7,6 +7,24 @@
     "GnosisSafeProxyFactory_v1_3_0": {
       "address": "0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2",
       "startBlock": 12504126
+    },
+    "SafeProxyFactory_v1_4_1": {
+      "address": "0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67",
+      "startBlock": 17440707
+    }
+  },
+  "gnosis" : {
+    "GnosisSafeProxyFactory_v1_1_1": {
+      "address": "0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B",
+      "startBlock": 10045327
+    },
+    "GnosisSafeProxyFactory_v1_3_0": {
+      "address": "0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2",
+      "startBlock": 16236878
+    },
+    "SafeProxyFactory_v1_4_1": {
+      "address": "0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67",
+      "startBlock": 27419153
     }
   },
   "matic" : {
@@ -17,6 +35,20 @@
     "GnosisSafeProxyFactory_v1_3_0": {
       "address": "0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2",
       "startBlock": 14370881
+    },    
+    "SafeProxyFactory_v1_4_1": {
+      "address": "0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67",
+      "startBlock": 40683009 
+    }
+  },
+  "bsc": {
+    "GnosisSafeProxyFactory_v1_3_0": {
+      "address": "0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2",
+      "startBlock": 14370881
+    },
+    "SafeProxyFactory_v1_4_1": {
+      "address": "0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67",
+      "startBlock": 40683009 
     }
   }
 }
