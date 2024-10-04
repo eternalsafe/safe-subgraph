@@ -1,5 +1,4 @@
-
-# Safe subgraph
+# Safe Subgraph
 
 This Subgraph dynamically tracks activity on any Safe{Wallet} deployed through the factory (current support for versions 1.1.1, 1.3.0, 1.4.0 and 1.4.1).
 
@@ -75,8 +74,6 @@ $ ./script/deploy.sh [--network (from above list)] [--access-token xxxxxxxxxxxx]
 ## Model
 
 - Wallet
-    -  Transaction
-- WalletL2 (needed as a separate entity to support SafeL2 events)
     -  Transaction
 
 ## Query samples

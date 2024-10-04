@@ -18,10 +18,10 @@ type Wallet @entity {
     "Factory address that deployed the wallet"
     factory             : Bytes!
 
-    "Singleton address used by the proxy (formally known as mastercopy)"
+    "Singleton address used by the proxy (formerly known as mastercopy)"
     singleton          : Bytes!
 
-    "Version of the Safe{Wallet} (e.g. 1.3.0 or 1.3.0-L2)"
+    "Version of the Safe{Wallet} (e.g. 1.1.1, 1.3.0, 1.3.0-L2, etc.)"
     version             : String
 
     "Nonce used to order and uniquely identified each transaction"

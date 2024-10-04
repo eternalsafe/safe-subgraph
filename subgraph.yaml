@@ -24,8 +24,6 @@ dataSources:
           file: ./abis/GnosisSafeProxyFactory_v1.1.1.json
         - name: GnosisSafe
           file: ./abis/GnosisSafe.json
-        - name: GnosisSafeL2
-          file: ./abis/GnosisSafeL2.json
       eventHandlers:
         - event: ProxyCreation(address)
           handler: handleProxyCreation_1_1_1
@@ -48,8 +46,6 @@ dataSources:
           file: ./abis/GnosisSafeProxyFactory_v1.3.0.json
         - name: GnosisSafe
           file: ./abis/GnosisSafe.json
-        - name: GnosisSafeL2
-          file: ./abis/GnosisSafeL2.json
       eventHandlers:
         - event: ProxyCreation(address,address)
           handler: handleProxyCreation_1_3_0
@@ -72,8 +68,6 @@ dataSources:
           file: ./abis/SafeProxyFactory_v1.4.1.json
         - name: GnosisSafe
           file: ./abis/GnosisSafe.json
-        - name: GnosisSafeL2
-          file: ./abis/GnosisSafeL2.json
       eventHandlers:
         - event: ProxyCreation(indexed address,address)
           handler: handleProxyCreation_1_4_1
