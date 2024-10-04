@@ -123,13 +123,8 @@ export function handleChangedMasterCopy(event: ChangedMasterCopy): void {
   if (wallet != null) {
     wallet.singleton = event.params.singleton;
 
-    // TODO: it would be nice if we could change the data source for the wallet at this point from Safe to SafeL2 but it doesn't seem to be possible
-    let maybeL2 = "";
-    let isL2 = isL2Wallet(event.params.singleton);
-    if (isL2) {
-      maybeL2 = "-L2";
-    }
-
+    // it would be nice if we could change the data source for the wallet at this point from Safe to SafeL2 but it doesn't seem to be possible
+    let maybeL2 = isL2Wallet(event.params.singleton) ? "-L2" : "";
     wallet.version = safeInstance.VERSION() + maybeL2;
 
     wallet.save();

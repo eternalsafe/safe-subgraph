@@ -39,12 +39,9 @@ function handleProxyCreation(
   let callGetOwnerResult = safeInstance.try_getOwners();
 
   if (!callGetOwnerResult.reverted) {
-    let maybeL2 = "";
-
     let isL2 = isL2Wallet(singletonAddress);
-    if (isL2) {
-      maybeL2 = "-L2";
-    }
+
+    let maybeL2 = isL2 ? "-L2" : "";
 
     let wallet = new Wallet(walletAddress.toHex());
     wallet.creator = event.transaction.from;

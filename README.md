@@ -23,6 +23,10 @@ As of writing, the following networks are not supported by the [decentralized ne
 - Aurora
 - Sepolia
 
+#### L1 and L2 Safes
+
+There are two versions of the Safe contract, the original Safe and the [SafeL2](https://github.com/safe-global/safe-smart-account/blob/main/contracts/SafeL2.sol#L10). This subgraph supports both versions, via the same subgraph, but with two different data sources. The L1 data source is named `Safe` and the L2 data source is named `SafeL2`. The L2 data source is more efficient due to the use of events, so we try to use the L2 data source whenever possible. However, there are some cases where an L2 safe may be detected as an L1 safe, for example, if a new L2 singleton is deployed that this subgraph does not know about. In these cases, we will use the L1 data source for the L2 Safe. This is not a problem as L2 Safes can still be indexed via the call handler rather than the event handler, it's just less efficient.
+
 ## Prerequiste
 
 - yarn

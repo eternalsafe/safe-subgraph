@@ -35,6 +35,13 @@ export function padLeft(input: string, length: number, symbol: string): string {
   return "0x" + input;
 }
 
+/**
+ * Tries to determine if the given singleton is an L2 singleton
+ * by checking the singleton address against a list of known L2 singletons.
+ * This means if new singletons are deployed in future, they will not be considered L2
+ * @param singleton - the singleton address to check
+ * @returns true if the singleton is an L2 singleton, false otherwise
+ */
 export function isL2Wallet(singleton: Address): boolean {
   // TODO: check against a list of known L2 singletons
   return false;
