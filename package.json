@@ -6,7 +6,8 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "test": "graph test -d"
+    "test": "graph test -d",
+    "test:ci": "graph test"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "0.84.0",
