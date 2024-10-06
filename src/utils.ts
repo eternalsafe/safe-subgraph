@@ -1,4 +1,5 @@
 import { Address, BigInt, ByteArray, Wrapped } from "@graphprotocol/graph-ts";
+import { getSafeL2SingletonDeployments } from "@safe-global/safe-deployments";
 
 export function zeroBigInt(): BigInt {
   return BigInt.fromI32(0);
@@ -42,8 +43,16 @@ export function padLeft(input: string, length: number, symbol: string): string {
  * @param singleton - the singleton address to check
  * @returns true if the singleton is an L2 singleton, false otherwise
  */
-export function isL2Wallet(singleton: Address): boolean {
-  // TODO: check against a list of known L2 singletons
+export function isL2Wallet(singleton: Address): bool {
+  let singletons = getSafeL2SingletonDeployments();
+  if (singletons) {
+    Object.values(singletons.deployments).forEach(({ address }) => {
+      if (singleton.equals(Address.fromString(address))) {
+        return true;
+      }
+    });
+  }
+
   return false;
 }
 
@@ -55,7 +64,7 @@ export function isL2Wallet(singleton: Address): boolean {
 export class ImprovedCallResult<T> {
   // `null` indicates a reverted call.
   private _value: Wrapped<T> | null;
-  private _isEmpty: boolean;
+  private _isEmpty: bool;
 
   constructor() {
     this._value = null;
@@ -86,13 +95,13 @@ export class ImprovedCallResult<T> {
   get value(): T {
     assert(
       !this.reverted,
-      'accessed value of a reverted call, ' +
-        'please check the `reverted` field before accessing the `value` field',
+      "accessed value of a reverted call, " +
+        "please check the `reverted` field before accessing the `value` field"
     );
     assert(
       !this._isEmpty,
-      'accessed value of an empty call result, ' +
-        'please check the `isEmpty` field before accessing the `value` field',
+      "accessed value of an empty call result, " +
+        "please check the `isEmpty` field before accessing the `value` field"
     );
     return changetype<Wrapped<T>>(this._value).inner;
   }
