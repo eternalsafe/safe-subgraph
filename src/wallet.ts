@@ -10,7 +10,13 @@ import {
 import { SafeMultiSigTransaction } from "../generated/templates/GnosisSafe/GnosisSafeL2";
 import { ChangedMasterCopy } from "../generated/templates/SafeMigraton/SafeMigration";
 import { Wallet, Transaction } from "../generated/schema";
-import { oneBigInt, concat, zeroBigInt, isL2Wallet } from "./utils";
+import {
+  oneBigInt,
+  concat,
+  zeroBigInt,
+  isL2Wallet,
+  ImprovedCallResult,
+} from "./utils";
 import {
   log,
   Address,
@@ -200,6 +206,29 @@ function addTransactionToWallet(
   return wallet;
 }
 
+/**
+ * Improved version of the GnosisSafe.try_nonce function which handles the case where
+ * the nonce is empty bytes.
+ * @param walletInstance A GnosisSafe contract instance
+ * @returns ImprovedCallResult<BigInt>
+ */
+function improved_try_nonce(walletInstance: GnosisSafe): ImprovedCallResult<BigInt> {
+  let result = walletInstance.tryCall("nonce", "nonce():(uint256)", []);
+  if (result.reverted) {
+    return new ImprovedCallResult();
+  }
+  let value = result.value;
+  if (value[0].toBytes().equals(Bytes.empty())) {
+    // consider a nonce of 0 bytes as a non-existent nonce
+    // this can happen when Safes are hacked
+    // e.g. The WazirX hacked safe:
+    // https://etherscan.io/address/0x27fd43babfbe83a81d14665b1a6fb8030a60c9b4
+    return ImprovedCallResult.emptyValue<BigInt>();
+  }
+
+  return ImprovedCallResult.fromValue(value[0].toBigInt());
+}
+
 export function handleTransaction(
   walletAddr: Address,
   hash: Bytes,
@@ -218,8 +247,18 @@ export function handleTransaction(
 
   if (wallet != null) {
     let walletInstance = GnosisSafe.bind(walletAddr);
-    let currentNonce = walletInstance.try_nonce();
-    if (!currentNonce.reverted) {
+    let currentNonce = improved_try_nonce(walletInstance);
+    if (currentNonce.isEmpty) {
+      log.warning(
+        "handleTransaction::Wallet: {} transaction {} - cannot get nonce (empty bytes)",
+        [walletAddr.toHexString(), hash.toHexString()]
+      );
+    } else if (currentNonce.reverted) {
+      log.warning(
+        "handleTransaction::Wallet: {} transaction {} - cannot get nonce (reverted)",
+        [walletAddr.toHexString(), hash.toHexString()]
+      );
+    } else {
       let nonce = currentNonce.value.equals(zeroBigInt())
         ? currentNonce.value
         : currentNonce.value.minus(oneBigInt());
@@ -267,11 +306,6 @@ export function handleTransaction(
       wallet = addTransactionToWallet(<Wallet>wallet, transaction);
       wallet.currentNonce = currentNonce.value;
       wallet.save();
-    } else {
-      log.warning(
-        "handleTransaction::Wallet: {} transaction {} - cannot get nonce (reverted)",
-        [walletAddr.toHexString(), hash.toHexString()]
-      );
     }
   } else {
     log.warning("handleTransaction::Wallet {} not found", [
