@@ -1,5 +1,5 @@
 import { Address, BigInt, ByteArray, Wrapped } from "@graphprotocol/graph-ts";
-import { getSafeL2SingletonDeployments } from "@safe-global/safe-deployments";
+// import { _SAFE_L2_DEPLOYMENTS } from "@safe-global/safe-deployments/src/deployments";
 
 export function zeroBigInt(): BigInt {
   return BigInt.fromI32(0);
@@ -36,6 +36,15 @@ export function padLeft(input: string, length: number, symbol: string): string {
   return "0x" + input;
 }
 
+// Taken from https://github.com/safe-global/safe-deployments
+// at commit f215d84bdd00ad1ea2d92d0474b548826671bdae
+const L2Singletons: Address[] = [
+  Address.fromString("0x3E5c63644E683549055b9Be8653de26E0B4CD36E"),
+  Address.fromString("0xfb1bffC9d739B8D520DaF37dF666da4C687191EA"),
+  Address.fromString("0x1727c2c531cf966f902E5927b98490fDFb3b2b70"),
+  Address.fromString("0x29fcB43b46531BcA003ddC8FCB67FFE91900C762"),
+];
+
 /**
  * Tries to determine if the given singleton is an L2 singleton
  * by checking the singleton address against a list of known L2 singletons.
@@ -44,16 +53,7 @@ export function padLeft(input: string, length: number, symbol: string): string {
  * @returns true if the singleton is an L2 singleton, false otherwise
  */
 export function isL2Wallet(singleton: Address): bool {
-  let singletons = getSafeL2SingletonDeployments();
-  if (singletons) {
-    Object.values(singletons.deployments).forEach(({ address }) => {
-      if (singleton.equals(Address.fromString(address))) {
-        return true;
-      }
-    });
-  }
-
-  return false;
+  return L2Singletons.includes(singleton);
 }
 
 /**
