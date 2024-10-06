@@ -17,17 +17,17 @@ import {
 } from "@graphprotocol/graph-ts";
 import { isL2Wallet, zeroBigInt } from "./utils";
 
-function getSingleton(address: Address): Address | null {
-  let callGetStorageResult = GnosisSafe.bind(address).try_getStorageAt(
-    BigInt.fromI32(0),
-    BigInt.fromI32(1)
-  );
-
-  if (!callGetStorageResult.reverted) {
-    return Address.fromBytes(callGetStorageResult.value);
-  } else {
+/**
+ * Get the singleton address from the proxy creation transaction input data
+ * @param input Input data from the proxy creation transaction
+ * @returns the singleton address or null if it could not be determined
+ */
+function getSingleton(input: Bytes): Address | null {
+  if (input.length < 36) {
     return null;
   }
+
+  return Address.fromBytes(Bytes.fromUint8Array(input.subarray(16, 36)));
 }
 
 function handleProxyCreation(
@@ -83,7 +83,7 @@ export function handleProxyCreation_1_3_0(event: ProxyCreation_v1_3_0): void {
 }
 
 export function handleProxyCreation_1_1_1(event: ProxyCreation_v1_1_1): void {
-  let singleton = getSingleton(event.params.proxy);
+  let singleton = getSingleton(event.transaction.input);
 
   if (!singleton) {
     log.warning(
