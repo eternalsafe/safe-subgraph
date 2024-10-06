@@ -21,7 +21,7 @@ type Wallet @entity {
     "Singleton address used by the proxy (formerly known as mastercopy)"
     singleton          : Bytes!
 
-    "Version of the Safe{Wallet} (e.g. 1.1.1, 1.3.0, 1.3.0-L2, etc.)"
+    "Version of the Safe{Wallet} (e.g. 1.1.1, 1.3.0, 1.3.0+L2, etc.)"
     version             : String
 
     "Nonce used to order and uniquely identified each transaction"

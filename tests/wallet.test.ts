@@ -4,7 +4,7 @@ import {
   test,
   clearStore,
   createMockedFunction,
-  afterAll,
+  afterEach,
   newMockCall,
 } from "matchstick-as/assembly/index";
 import { handleExecTransaction } from "../src/wallet";
@@ -13,7 +13,7 @@ import { Wallet } from "../generated/schema";
 import { zeroBigInt } from "../src/utils";
 
 describe("handleExecTransaction tests", () => {
-  afterAll(() => {
+  afterEach(() => {
     // Clear the store after tests
     clearStore();
   });
@@ -92,7 +92,6 @@ describe("handleExecTransaction tests", () => {
       ),
     ];
 
-    // Call the handler with the mocked call
     handleExecTransaction(call);
   });
 
@@ -180,7 +179,6 @@ describe("handleExecTransaction tests", () => {
       ),
     ];
 
-    // Call the handler with the mocked call
     handleExecTransaction(call);
   });
 });

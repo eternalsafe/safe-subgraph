@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "license": "MIT",
   "repository": "https://github.com/eternalsafe/safe-subgraph",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "test": "graph test -d"
+  },
   "devDependencies": {
     "@graphprotocol/graph-cli": "0.84.0",
     "@graphprotocol/graph-ts": "^0.35.1",

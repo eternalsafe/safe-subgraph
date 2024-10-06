@@ -1,5 +1,5 @@
-import { ProxyCreation as ProxyCreation_v1_3_0 } from "../generated/GnosisSafeProxyFactory_v1_3_0/GnosisSafeProxyFactory";
 import { ProxyCreation as ProxyCreation_v1_1_1 } from "../generated/GnosisSafeProxyFactory_v1_1_1/GnosisSafeProxyFactory";
+import { ProxyCreation as ProxyCreation_v1_3_0 } from "../generated/GnosisSafeProxyFactory_v1_3_0/GnosisSafeProxyFactory";
 import { ProxyCreation as ProxyCreation_v1_4_1 } from "../generated/SafeProxyFactory_v1_4_1/SafeProxyFactory";
 import { GnosisSafe } from "../generated/templates/GnosisSafe/GnosisSafe";
 import { Wallet } from "../generated/schema";
@@ -41,7 +41,7 @@ function handleProxyCreation(
   if (!callGetOwnerResult.reverted) {
     let isL2 = isL2Wallet(singletonAddress);
 
-    let maybeL2 = isL2 ? "-L2" : "";
+    let maybeL2 = isL2 ? "+L2" : "";
 
     let wallet = new Wallet(walletAddress.toHex());
     wallet.creator = event.transaction.from;
