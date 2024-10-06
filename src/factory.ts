@@ -53,6 +53,9 @@ function handleProxyCreation(
     wallet.version = safeInstance.VERSION() + maybeL2;
     wallet.owners = changetype<Bytes[]>(callGetOwnerResult.value);
     wallet.threshold = safeInstance.getThreshold();
+    // it is possible to setup a Safe and do your first transaction, all in one Ethereum transaction
+    // TODO: check if this impacts the nonce
+    // TODO: index the first transaction
     wallet.currentNonce = zeroBigInt();
     wallet.transactions = [];
     wallet.save();

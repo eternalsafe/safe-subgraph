@@ -27,6 +27,10 @@ dataSources:
       eventHandlers:
         - event: ProxyCreation(address)
           handler: handleProxyCreation_1_1_1
+          calls:
+            getOwners: GnosisSafe[event.params.proxy].getOwners()
+            getThreshold: GnosisSafe[event.params.proxy].getThreshold()
+            VERSION: GnosisSafe[event.params.proxy].VERSION()
   - kind: ethereum/contract
     name: GnosisSafeProxyFactory_v1_3_0
     network: mainnet
@@ -49,6 +53,10 @@ dataSources:
       eventHandlers:
         - event: ProxyCreation(address,address)
           handler: handleProxyCreation_1_3_0
+          calls:
+            getOwners: GnosisSafe[event.params.proxy].getOwners()
+            getThreshold: GnosisSafe[event.params.proxy].getThreshold()
+            VERSION: GnosisSafe[event.params.proxy].VERSION()
   - kind: ethereum/contract
     name: SafeProxyFactory_v1_4_1
     network: mainnet
@@ -71,6 +79,10 @@ dataSources:
       eventHandlers:
         - event: ProxyCreation(indexed address,address)
           handler: handleProxyCreation_1_4_1
+          calls:
+            getOwners: GnosisSafe[event.params.proxy].getOwners()
+            getThreshold: GnosisSafe[event.params.proxy].getThreshold()
+            VERSION: GnosisSafe[event.params.proxy].VERSION()
 templates:
   - kind: ethereum/contract
     name: Safe
