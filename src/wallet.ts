@@ -7,7 +7,7 @@ import {
   ExecutionFailure,
   ExecTransactionCall,
 } from "../generated/templates/Safe/GnosisSafe";
-import { SafeMultiSigTransaction } from "../generated/templates/GnosisSafe/GnosisSafeL2";
+import { SafeMultiSigTransaction } from "../generated/templates/Safe/GnosisSafeL2";
 import { ChangedMasterCopy } from "../generated/templates/SafeMigraton/SafeMigration";
 import { Wallet, Transaction } from "../generated/schema";
 import {

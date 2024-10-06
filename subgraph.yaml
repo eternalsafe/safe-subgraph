@@ -71,7 +71,6 @@ dataSources:
       eventHandlers:
         - event: ProxyCreation(indexed address,address)
           handler: handleProxyCreation_1_4_1
-
 templates:
   - kind: ethereum/contract
     name: Safe
