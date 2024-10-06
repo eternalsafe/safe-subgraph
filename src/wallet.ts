@@ -24,6 +24,9 @@ import {
   crypto,
   ByteArray,
   BigInt,
+  ValueKind,
+  Value,
+  ethereum,
 } from "@graphprotocol/graph-ts";
 
 export function handleAddedOwner(event: AddedOwner): void {
@@ -212,13 +215,16 @@ function addTransactionToWallet(
  * @param walletInstance A GnosisSafe contract instance
  * @returns ImprovedCallResult<BigInt>
  */
-function improved_try_nonce(walletInstance: GnosisSafe): ImprovedCallResult<BigInt> {
+function improved_try_nonce(
+  walletInstance: GnosisSafe
+): ImprovedCallResult<BigInt> {
   let result = walletInstance.tryCall("nonce", "nonce():(uint256)", []);
   if (result.reverted) {
     return new ImprovedCallResult();
   }
+
   let value = result.value;
-  if (value[0].toBytes().equals(Bytes.empty())) {
+  if (value[0].kind == ethereum.ValueKind.BYTES && value[0].toBytes().length == 0) {
     // consider a nonce of 0 bytes as a non-existent nonce
     // this can happen when Safes are hacked
     // e.g. The WazirX hacked safe:
