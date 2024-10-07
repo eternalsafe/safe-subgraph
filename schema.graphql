@@ -1,4 +1,3 @@
-
 type Wallet @entity {
     "Unique identifier of the wallet (lowercase Safe{Wallet} address)"
     id                  : ID!
@@ -10,7 +9,7 @@ type Wallet @entity {
     network             : String!
 
     "Timestamp when the wallet was deployed"
-    stamp               : BigInt!
+    timestamp           : BigInt!
 
     "Transaction hash when the wallet was deployed"
     hash                : Bytes!
@@ -38,31 +37,31 @@ type Wallet @entity {
 }
 
 type Transaction @entity {
-    "Unique Identifier of the transaction called Transaction Hash = keccak256(encodeTransactionData(to, value, data, operation, safeTxGas, baseGas, gasPrice, gasToken, refundReceiver, _nonce))"
+    "Unique identifier of the transaction = keccak256(concat(walletAddress, txHash))"
     id                  : ID!
 
     "Timestamp when the transaction was executed"
-    stamp               : BigInt
+    timestamp           : BigInt
 
     "Block on Ethereum"
     block               : BigInt
 
-    "Transaction hash on Ethereum"
-    hash                : Bytes
-
     "Status of the transaction"
     status              : TransactionStatus
 
-    "Transaction hash on the Safe"
-    txhash                : Bytes
+    "Network transaction hash"
+    hash                : Bytes
+
+    "Safe{Wallet} transaction hash"
+    txHash              : Bytes
 
     "Ether Amount (in WEI) included in the transaction - transfered from the wallet when the transaction is executed"
     value               : BigInt
 
     "Destination of the transaction"
-    destination         : Bytes
+    to                  : Bytes
 
-    "Data of the transaction - smart contract input data bytecode - see https://lab.miguelmota.com/ethereum-input-data-decoder/example/"
+    "Data of the transaction - smart contract input data bytecode"
     data                : Bytes
 
     "Signatures"
@@ -74,14 +73,14 @@ type Transaction @entity {
     "Operation"
     operation           : Operation
 
-    "Estimated Gas that should be used for the Safe transaction."
+    "Estimated Gas that should be used for the underlying Safe transaction"
     estimatedSafeTxGas  : BigInt
 
-    "Estimated Gas costs for that are indipendent of the transaction execution (e.g. base transaction fee, signature check, payment of the refund)"
+    "Estimated Gas costs independent of the transaction execution (e.g. base transaction fee, signature check, payment of the refund)"
     estimatedBaseGas    : BigInt
 
     "gasPrice (in gasToken)"
-    gasPrice   : BigInt
+    gasPrice            : BigInt
 
     "gasToken"
     gasToken            : Bytes
@@ -89,7 +88,7 @@ type Transaction @entity {
     "refundReceiver"
     refundReceiver      : Bytes
 
-    "Amount paid as fee to refundReceiver "
+    "Amount paid as fee to refundReceiver"
     payment             : BigInt
 
     "Wallet parent"
@@ -100,7 +99,7 @@ enum TransactionStatus {
     "Transaction was executed successfully"
     EXECUTED
 
-    "Transaction failed during the execution "
+    "Transaction failed during the execution"
     FAILED
 }
 

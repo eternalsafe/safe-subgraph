@@ -45,7 +45,7 @@ function handleProxyCreation(
     let wallet = new Wallet(walletAddress.toHex());
     wallet.creator = event.transaction.from;
     wallet.network = dataSource.network();
-    wallet.stamp = event.block.timestamp;
+    wallet.timestamp = event.block.timestamp;
     wallet.hash = event.transaction.hash;
     wallet.factory = event.address as Address;
     wallet.singleton = singletonAddress;

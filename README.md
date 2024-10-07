@@ -91,41 +91,41 @@ $ ./script/deploy.sh [--network (from above list)] [--access-token xxxxxxxxxxxx]
 
 ## Query samples
 
-### Get Wallet details
+### Get wallet details
 
 ```graphql
 {
-  wallet(id: "0x12312312.....") {
+  wallet(id: "0x220866b1a2219f40e72f5c628b65d54268ca3a9d") {
     id
-    version
     creator
     network
-    stamp
+    timestamp
     hash
     factory
-    mastercopy
+    singleton
     version
+    currentNonce
     owners
     threshold
-    currentNonce
     transactions {
       id
-      stamp
-      hash
+      timestamp
+      block
       status
+      hash
+      txHash
       value
-      destination
+      to
       data
       signatures
       nonce
       operation
       estimatedSafeTxGas
       estimatedBaseGas
-      estimatedGasPrice
+      gasPrice
       gasToken
       refundReceiver
-      gasUsed
-      gasPrice
+      payment
     }
   }
 }

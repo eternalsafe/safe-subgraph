@@ -53,7 +53,7 @@ describe("handleExecTransaction tests", () => {
       "0xB6BdD4F0839eF6791eC1c77Cf29B10592d514624"
     );
     wallet.network = "mainnet";
-    wallet.stamp = BigInt.fromString("1670966903");
+    wallet.timestamp = BigInt.fromString("1670966903");
     wallet.hash = Bytes.fromHexString(
       "0xc6f6ed20f8e7a199429d24fa78befe38714c32496d18ab9c24603dd87063bc1c"
     );
@@ -129,7 +129,7 @@ describe("handleExecTransaction tests", () => {
       "0xB6BdD4F0839eF6791eC1c77Cf29B10592d514624"
     );
     wallet.network = "mainnet";
-    wallet.stamp = BigInt.fromString("1670966903");
+    wallet.timestamp = BigInt.fromString("1670966903");
     wallet.hash = Bytes.fromHexString(
       "0xc6f6ed20f8e7a199429d24fa78befe38714c32496d18ab9c24603dd87063bc1c"
     );
@@ -207,7 +207,7 @@ describe("handleExecTransaction tests", () => {
       "0xfA54B4085811aef6ACf47D51B05FdA188DEAe28b"
     );
     wallet.network = "mainnet";
-    wallet.stamp = BigInt.fromString("1670413079");
+    wallet.timestamp = BigInt.fromString("1670413079");
     wallet.hash = Bytes.fromHexString(
       "0x3c889ee7c1a19bb15d899f21c5c7d9da0af0c5a5f597f0e288b7309169b4dba5"
     );

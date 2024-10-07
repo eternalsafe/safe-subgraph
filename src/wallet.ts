@@ -85,8 +85,8 @@ export function handleExecutionSuccess(event: ExecutionSuccess): void {
     transaction.status = "EXECUTED";
     transaction.block = event.block.number;
     transaction.hash = event.transaction.hash;
-    transaction.stamp = event.block.timestamp;
-    transaction.txhash = event.params.txHash;
+    transaction.timestamp = event.block.timestamp;
+    transaction.txHash = event.params.txHash;
     transaction.payment = event.params.payment;
     transaction.save();
 
@@ -108,8 +108,8 @@ export function handleExecutionFailure(event: ExecutionFailure): void {
     transaction.status = "FAILED";
     transaction.block = event.block.number;
     transaction.hash = event.transaction.hash;
-    transaction.stamp = event.block.timestamp;
-    transaction.txhash = event.params.txHash;
+    transaction.timestamp = event.block.timestamp;
+    transaction.txHash = event.params.txHash;
     transaction.payment = event.params.payment;
     transaction.save();
 
@@ -299,7 +299,7 @@ export function handleTransaction(
         );
       }
       transaction.value = value;
-      transaction.destination = to;
+      transaction.to = to;
       transaction.signatures = signatures;
       transaction.nonce = nonce;
       transaction.operation = operation == 0 ? "CALL" : "DELEGATE_CALL";
