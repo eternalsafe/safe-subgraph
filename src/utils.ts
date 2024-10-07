@@ -1,5 +1,4 @@
 import { Address, BigInt, ByteArray, Wrapped } from "@graphprotocol/graph-ts";
-// import { _SAFE_L2_DEPLOYMENTS } from "@safe-global/safe-deployments/src/deployments";
 
 export function zeroBigInt(): BigInt {
   return BigInt.fromI32(0);

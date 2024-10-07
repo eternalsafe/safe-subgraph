@@ -222,7 +222,10 @@ function improved_try_nonce(
   }
 
   let value = result.value;
-  if (value[0].kind == ethereum.ValueKind.BYTES && value[0].toBytes().length == 0) {
+  if (
+    value[0].kind == ethereum.ValueKind.BYTES &&
+    value[0].toBytes().length == 0
+  ) {
     // consider a nonce of 0 bytes as a non-existent nonce
     // this can happen when Safes are hacked
     // e.g. The WazirX hacked safe:

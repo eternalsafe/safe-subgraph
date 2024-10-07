@@ -13,7 +13,6 @@ import {
   dataSource,
   Address,
   ethereum,
-  BigInt,
 } from "@graphprotocol/graph-ts";
 import { isL2Wallet, zeroBigInt } from "./utils";
 

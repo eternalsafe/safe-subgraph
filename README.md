@@ -17,6 +17,7 @@ All networks which are supported by Eternal Safe and The Graph network are suppo
 - Avalanche (`avalanche`): TODO
 
 As of writing, the following networks are not supported by the [decentralized network](https://thegraph.com/docs/en/developing/supported-networks/):
+
 - Polygon zkEVM
 - zkSync Era
 - Aurora
@@ -30,11 +31,11 @@ The v1.1.1 factory is not deployed correctly on all networks. For such networks,
 
 #### v1.3.0 Factory Note
 
-There are two commonly used deployements of the v1.3.0 factory. Both are indexed. One is known as the "canonical" deployment and the other as the [eip155 deployment](https://github.com/safe-global/safe-deployments/blob/main/src/assets/v1.3.0/proxy_factory.json).
+There are two commonly used deployements of the v1.3.0 factory. Both are indexed. One is known as the "canonical" deployment and the other as the ["eip155" deployment](https://github.com/safe-global/safe-deployments/blob/main/src/assets/v1.3.0/proxy_factory.json).
 
 #### L1 and L2 Safes
 
-There are two versions of the Safe contract, the original Safe and the [SafeL2](https://github.com/safe-global/safe-smart-account/blob/main/contracts/SafeL2.sol#L10). This subgraph supports both versions, via the same subgraph, but with two different data sources. This means you can query Safe and SafeL2 wallets in the same way with the same GraphQL queries against one endpoint, but they are indexed differently in The Graph.  
+There are two versions of the Safe contract, the original Safe and the [SafeL2](https://github.com/safe-global/safe-smart-account/blob/main/contracts/SafeL2.sol#L10). This subgraph supports both versions, via the same subgraph, but with two different data sources. This means you can query Safe and SafeL2 wallets in the same way with the same GraphQL queries against one endpoint, but they are indexed differently in The Graph.
 
 The L1 data source is named `Safe` and the L2 data source is named `SafeL2`. The L2 data source is more efficient due to the use of events, so we try to use the L2 data source whenever possible. However, there are some cases where an L2 safe may be detected as an L1 safe, for example, if a new L2 singleton is deployed that this subgraph does not know about. In these cases, we will use the L1 data source for the L2 Safe. This is not a problem as L2 Safes can still be indexed via the call handler rather than the event handler, it's just less efficient.
 
@@ -86,11 +87,11 @@ $ ./script/deploy.sh [--network (from above list)] [--access-token xxxxxxxxxxxx]
 ## Model
 
 - Wallet
-    -  Transaction
+  - Transaction
 
 ## Query samples
 
-### Get Wallet details 
+### Get Wallet details
 
 ```graphql
 {
@@ -128,6 +129,4 @@ $ ./script/deploy.sh [--network (from above list)] [--access-token xxxxxxxxxxxx]
     }
   }
 }
-
 ```
-
