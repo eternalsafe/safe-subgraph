@@ -22,6 +22,16 @@ As of writing, the following networks are not supported by the [decentralized ne
 - Aurora
 - Sepolia
 
+All of the network specific data source parameters are defined in the `networks.json` file.
+
+#### v1.1.1 Factory Note
+
+The v1.1.1 factory is not deployed correctly on all networks. For such networks, we have used the null address (0x0000000000000000000000000000000000000000) in the `networks.json`, so that the built `subgraph.yaml` will be valid for all networks.
+
+#### v1.3.0 Factory Note
+
+There are two commonly used deployements of the v1.3.0 factory. Both are indexed. One is known as the "canonical" deployment and the other as the [eip155 deployment](https://github.com/safe-global/safe-deployments/blob/main/src/assets/v1.3.0/proxy_factory.json).
+
 #### L1 and L2 Safes
 
 There are two versions of the Safe contract, the original Safe and the [SafeL2](https://github.com/safe-global/safe-smart-account/blob/main/contracts/SafeL2.sol#L10). This subgraph supports both versions, via the same subgraph, but with two different data sources. This means you can query Safe and SafeL2 wallets in the same way with the same GraphQL queries against one endpoint, but they are indexed differently in The Graph.  

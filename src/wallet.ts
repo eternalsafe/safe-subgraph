@@ -24,8 +24,6 @@ import {
   crypto,
   ByteArray,
   BigInt,
-  ValueKind,
-  Value,
   ethereum,
 } from "@graphprotocol/graph-ts";
 
