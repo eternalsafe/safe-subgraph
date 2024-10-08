@@ -4,7 +4,7 @@ This Subgraph dynamically tracks activity on any Safe{Wallet} deployed through t
 
 ### Subgraphs
 
-All networks which are supported by Eternal Safe and The Graph network are supported by this subgraph. For any CLI parameters, you must use the network name as defined in parentheses below.
+All L1 and L2 networks which are supported by Eternal Safe and The Graph network are supported by this subgraph. For any CLI parameters, you must use the network name as defined in parentheses below.
 
 - Mainnet (`mainnet`): TODO
 - Gnosis Chain (`gnosis`): TODO
@@ -33,11 +33,11 @@ The v1.1.1 factory is not deployed correctly on all networks. For such networks,
 
 There are two commonly used deployements of the v1.3.0 factory. Both are indexed. One is known as the "canonical" deployment and the other as the ["eip155" deployment](https://github.com/safe-global/safe-deployments/blob/main/src/assets/v1.3.0/proxy_factory.json).
 
-#### L1 and L2 Safes
+#### L2 Safes
 
-There are two versions of the Safe contract, the original Safe and the [SafeL2](https://github.com/safe-global/safe-smart-account/blob/main/contracts/SafeL2.sol#L10). This subgraph supports both versions, via the same subgraph, but with two different data sources. This means you can query Safe and SafeL2 wallets in the same way with the same GraphQL queries against one endpoint, but they are indexed differently in The Graph.
+On any L2, there is the original (in a sense that it is the same as  the original contract deployed to L1) `Safe` contract and the [SafeL2](https://github.com/safe-global/safe-smart-account/blob/main/contracts/SafeL2.sol#L10) contract. This subgraph supports both contracts, via the same instance, but with two different data sources. This means you can query `Safe` and `SafeL2` wallets in the same way with the same GraphQL queries against one endpoint, even though they are indexed differently in _The Graph_.
 
-The L1 data source is named `Safe` and the L2 data source is named `SafeL2`. The L2 data source is more efficient due to the use of events, so we try to use the L2 data source whenever possible. However, there are some cases where an L2 safe may be detected as an L1 safe, for example, if a new L2 singleton is deployed that this subgraph does not know about. In these cases, we will use the L1 data source for the L2 Safe. This is not a problem as L2 Safes can still be indexed via the call handler rather than the event handler, it's just less efficient.
+The data sources are defined in [subgraph.yaml](subgraph.yaml) as `templates` and are named accordingly `Safe` and `SafeL2`. The `SafeL2` data source is more efficient because it reads the data from events emitted from the corresponding contract, whereas `Safe` data source must rely on call handlers in lieu of the contract not emitting events. The subgraph will automatically detect whether the new safe is of `Safe` or `SafeL2` instance based on the known `SafeL2` singleton deployment address. Howver, if a new `SafeL2` singleton is deployed that this subgraph does not know about, the subgraph will fall back to using `Safe` data source and its call handler to ensure it reads all the information from the safe, no matter whether it emits events or not. This is not a problem as `SafeL2` safes can still be indexed via the call handler rather than the event handler, it's just less efficient.
 
 ## Prerequiste
 
