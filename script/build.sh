@@ -37,6 +37,7 @@ done
 eval set -- "$PARAMS"
 
 if [ $RESET -eq "1" ]; then
+    echo "Deleting build and generated folders"
     rm -rf build/ generated/ 
     CODE_GEN="1"
 fi

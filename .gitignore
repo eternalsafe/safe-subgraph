@@ -1,10 +1,5 @@
 .env
 node_modules
-package-lock.json
-yarn.lock
 generated
 build
 yarn-error.log
-.schema.remote.graphql
-data
-old
