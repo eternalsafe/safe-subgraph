@@ -134,6 +134,10 @@ templates:
           handler: handleRemovedOwner
         - event: ChangedThreshold(uint256)
           handler: handleChangedThreshold
+        - event: ExecutionFromModuleSuccess(indexed address)
+          handler: handleExecutionFromModuleSuccess
+        - event: ExecutionFromModuleFailure(indexed address)
+          handler: handleExecutionFromModuleFailure
         - event: ExecutionSuccess(bytes32,uint256)
           handler: handleExecutionSuccess
         - event: ExecutionFailure(bytes32,uint256)
@@ -141,6 +145,8 @@ templates:
       callHandlers:
         - function: execTransaction(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,bytes)
           handler: handleExecTransaction
+        - function: execTransactionFromModule(address,uint256,bytes,uint8)
+          handler: handleExecTransactionFromModule
   - kind: ethereum/contract
     name: SafeL2
     network: mainnet
@@ -165,6 +171,12 @@ templates:
           handler: handleRemovedOwner
         - event: ChangedThreshold(uint256)
           handler: handleChangedThreshold
+        - event: ExecutionFromModuleSuccess(indexed address)
+          handler: handleExecutionFromModuleSuccess
+        - event: ExecutionFromModuleFailure(indexed address)
+          handler: handleExecutionFromModuleFailure
+        - event: SafeModuleTransaction(address,address,uint256,bytes,uint8)
+          handler: handleSafeModuleTransaction
         - event: ExecutionSuccess(bytes32,uint256)
           handler: handleExecutionSuccess
         - event: ExecutionFailure(bytes32,uint256)

@@ -71,7 +71,7 @@ $ ./script/build.sh [--reset] [--code-gen] [--network (from above list)]
 Requires [Docker](https://docs.docker.com/get-docker/) to be installed.
 
 ```
-$ graph test -d
+$ yarn test
 ```
 
 ## Deployment

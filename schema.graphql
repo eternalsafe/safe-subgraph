@@ -91,6 +91,9 @@ type Transaction @entity {
     "Amount paid as fee to refundReceiver"
     payment             : BigInt
 
+    "Present if the transaction is from a Safe module (in this case some other fields won't be available as not all fields are used in the Safe module context)"
+    module              : Bytes
+
     "Wallet parent"
     wallet              : Wallet! @derivedFrom(field: "transactions")
 }
