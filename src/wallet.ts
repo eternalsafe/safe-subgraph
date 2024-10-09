@@ -6,8 +6,14 @@ import {
   ExecutionSuccess,
   ExecutionFailure,
   ExecTransactionCall,
+  ExecutionFromModuleSuccess,
+  ExecutionFromModuleFailure,
+  ExecTransactionFromModuleCall,
 } from "../generated/templates/Safe/GnosisSafe";
-import { SafeMultiSigTransaction } from "../generated/templates/Safe/GnosisSafeL2";
+import {
+  SafeModuleTransaction,
+  SafeMultiSigTransaction,
+} from "../generated/templates/Safe/GnosisSafeL2";
 import { ChangedMasterCopy } from "../generated/templates/SafeMigraton/SafeMigration";
 import { Wallet, Transaction } from "../generated/schema";
 import {
@@ -26,6 +32,26 @@ import {
   BigInt,
   ethereum,
 } from "@graphprotocol/graph-ts";
+
+export function handleChangedMasterCopy(event: ChangedMasterCopy): void {
+  let walletAddr = event.address;
+  let safeInstance = GnosisSafe.bind(walletAddr);
+  let wallet = Wallet.load(walletAddr.toHex());
+
+  if (wallet != null) {
+    wallet.singleton = event.params.singleton;
+
+    // it would be nice if we could change the data source for the wallet at this point from Safe to SafeL2 but it doesn't seem to be possible
+    let maybeL2 = isL2Wallet(event.params.singleton) ? "+L2" : "";
+    wallet.version = safeInstance.VERSION() + maybeL2;
+
+    wallet.save();
+  } else {
+    log.warning("handleChangedMasterCopy::Wallet {} not found", [
+      walletAddr.toHexString(),
+    ]);
+  }
+}
 
 export function handleAddedOwner(event: AddedOwner): void {
   let walletAddr = event.address;
@@ -76,6 +102,101 @@ export function handleChangedThreshold(event: ChangedThreshold): void {
   }
 }
 
+export function handleExecutionFromModuleSuccess(
+  event: ExecutionFromModuleSuccess
+): void {
+  let walletAddr = event.address;
+  let wallet = Wallet.load(walletAddr.toHex());
+
+  if (wallet != null) {
+    let transaction = getTransaction(walletAddr, event.transaction.hash);
+    transaction.module = event.params.module;
+    transaction.status = "EXECUTED";
+    transaction.block = event.block.number;
+    transaction.hash = event.transaction.hash;
+    transaction.timestamp = event.block.timestamp;
+    transaction.save();
+
+    wallet = addTransactionToWallet(<Wallet>wallet, transaction);
+    wallet.save();
+  } else {
+    log.warning("handleExecutionFromModuleSuccess::Wallet {} not found", [
+      walletAddr.toHexString(),
+    ]);
+  }
+}
+
+export function handleExecutionFromModuleFailure(
+  event: ExecutionFromModuleFailure
+): void {
+  let walletAddr = event.address;
+  let wallet = Wallet.load(walletAddr.toHex());
+
+  if (wallet != null) {
+    let transaction = getTransaction(walletAddr, event.transaction.hash);
+    transaction.module = event.params.module;
+    transaction.status = "FAILED";
+    transaction.block = event.block.number;
+    transaction.hash = event.transaction.hash;
+    transaction.timestamp = event.block.timestamp;
+    transaction.save();
+  } else {
+    log.warning("handleExecutionFromModuleFailure::Wallet {} not found", [
+      walletAddr.toHexString(),
+    ]);
+  }
+}
+
+export function handleExecTransactionFromModule(
+  call: ExecTransactionFromModuleCall
+): void {
+  let walletAddr = call.to;
+  let wallet = Wallet.load(walletAddr.toHex());
+
+  if (wallet != null) {
+    let transaction = getTransaction(walletAddr, call.transaction.hash);
+    transaction.module = call.from;
+    transaction.to = call.inputs.to;
+    transaction.value = call.inputs.value;
+    transaction.data = call.inputs.data;
+    transaction.operation =
+      call.inputs.operation == 0 ? "CALL" : "DELEGATE_CALL";
+    transaction.save();
+
+    wallet = addTransactionToWallet(<Wallet>wallet, transaction);
+    wallet.save();
+  } else {
+    log.warning("handleExecTransactionFromModule::Wallet {} not found", [
+      walletAddr.toHexString(),
+    ]);
+  }
+}
+
+export function handleSafeModuleTransaction(
+  event: SafeModuleTransaction
+): void {
+  let walletAddr = event.address;
+  let wallet = Wallet.load(walletAddr.toHex());
+
+  if (wallet != null) {
+    let transaction = getTransaction(walletAddr, event.transaction.hash);
+    transaction.module = event.params.module;
+    transaction.to = event.params.to;
+    transaction.value = event.params.value;
+    transaction.data = event.params.data;
+    transaction.operation =
+      event.params.operation == 0 ? "CALL" : "DELEGATE_CALL";
+    transaction.save();
+
+    wallet = addTransactionToWallet(<Wallet>wallet, transaction);
+    wallet.save();
+  } else {
+    log.warning("handleSafeModuleTransaction::Wallet {} not found", [
+      walletAddr.toHexString(),
+    ]);
+  }
+}
+
 export function handleExecutionSuccess(event: ExecutionSuccess): void {
   let walletAddr = event.address;
   let wallet = Wallet.load(walletAddr.toHex());
@@ -117,26 +238,6 @@ export function handleExecutionFailure(event: ExecutionFailure): void {
     wallet.save();
   } else {
     log.warning("handleExecutionFailure::Wallet {} not found", [
-      walletAddr.toHexString(),
-    ]);
-  }
-}
-
-export function handleChangedMasterCopy(event: ChangedMasterCopy): void {
-  let walletAddr = event.address;
-  let safeInstance = GnosisSafe.bind(walletAddr);
-  let wallet = Wallet.load(walletAddr.toHex());
-
-  if (wallet != null) {
-    wallet.singleton = event.params.singleton;
-
-    // it would be nice if we could change the data source for the wallet at this point from Safe to SafeL2 but it doesn't seem to be possible
-    let maybeL2 = isL2Wallet(event.params.singleton) ? "+L2" : "";
-    wallet.version = safeInstance.VERSION() + maybeL2;
-
-    wallet.save();
-  } else {
-    log.warning("handleChangedMasterCopy::Wallet {} not found", [
       walletAddr.toHexString(),
     ]);
   }
@@ -199,7 +300,7 @@ function addTransactionToWallet(
 ): Wallet {
   let transactions = wallet.transactions;
 
-  if (transactions.indexOf(transaction.id, 0) == -1) {
+  if (transactions.indexOf(transaction.id) == -1) {
     transactions.push(transaction.id);
     wallet.transactions = transactions;
   }
@@ -236,7 +337,7 @@ function improved_try_nonce(
   return ImprovedCallResult.fromValue(value[0].toBigInt());
 }
 
-export function handleTransaction(
+function handleTransaction(
   walletAddr: Address,
   hash: Bytes,
   to: Address,
