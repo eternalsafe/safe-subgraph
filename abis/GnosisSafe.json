@@ -10,6 +10,19 @@
       {
         "indexed": false,
         "internalType": "address",
+        "name": "singleton",
+        "type": "address"
+      }
+    ],
+    "name": "ChangedMasterCopy",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "owner",
         "type": "address"
       }

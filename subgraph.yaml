@@ -128,6 +128,8 @@ templates:
         - name: GnosisSafeL2
           file: ./abis/GnosisSafeL2.json
       eventHandlers:
+        - event: ChangedMasterCopy(address)
+          handler: handleChangedMasterCopy
         - event: AddedOwner(address)
           handler: handleAddedOwner
         - event: RemovedOwner(address)
@@ -165,6 +167,8 @@ templates:
         - name: GnosisSafeL2
           file: ./abis/GnosisSafeL2.json
       eventHandlers:
+        - event: ChangedMasterCopy(address)
+          handler: handleChangedMasterCopy
         - event: AddedOwner(address)
           handler: handleAddedOwner
         - event: RemovedOwner(address)
@@ -183,25 +187,3 @@ templates:
           handler: handleExecutionFailure
         - event: SafeMultiSigTransaction(address,uint256,bytes,uint8,uint256,uint256,uint256,address,address,bytes,bytes)
           handler: handleSafeMultiSigTransaction
-  - kind: ethereum/contract
-    name: SafeMigraton
-    network: mainnet
-    source:
-      abi: SafeMigration
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ./src/wallet.ts
-      entities:
-        - Wallet
-      abis:
-        - name: GnosisSafe
-          file: ./abis/GnosisSafe.json
-        - name: GnosisSafeL2
-          file: ./abis/GnosisSafeL2.json
-        - name: SafeMigration
-          file: ./abis/SafeMigration.json
-      eventHandlers:
-        - event: ChangedMasterCopy(address)
-          handler: handleChangedMasterCopy
