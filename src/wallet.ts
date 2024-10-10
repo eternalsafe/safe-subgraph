@@ -9,12 +9,12 @@ import {
   ExecutionFromModuleSuccess,
   ExecutionFromModuleFailure,
   ExecTransactionFromModuleCall,
+  ChangedMasterCopy,
 } from "../generated/templates/Safe/GnosisSafe";
 import {
   SafeModuleTransaction,
   SafeMultiSigTransaction,
 } from "../generated/templates/Safe/GnosisSafeL2";
-import { ChangedMasterCopy } from "../generated/templates/SafeMigraton/SafeMigration";
 import { Wallet, Transaction } from "../generated/schema";
 import {
   oneBigInt,
