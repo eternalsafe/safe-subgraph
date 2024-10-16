@@ -1,6 +1,6 @@
 type Wallet @entity {
-    "Unique identifier of the wallet (lowercase Safe{Wallet} address)"
-    id                  : ID!
+    "Unique identifier of the wallet (lowercase Safe{Wallet} address) TODO: check if lowercase is still needed" 
+    id                  : Bytes!
 
     "Address that created the contract"
     creator             : Bytes!
@@ -32,13 +32,13 @@ type Wallet @entity {
     "Number of confirmations required to execute a transaction"
     threshold            : BigInt!
 
-    "List of sucessful and failed transactions executed from the wallet"
-    transactions        : [Transaction!]!
+    "List of successful and failed transactions executed from the wallet"
+    transactions        : [Transaction!]! @derivedFrom(field: "wallet")
 }
 
 type Transaction @entity {
     "Unique identifier of the transaction = keccak256(concat(walletAddress, txHash))"
-    id                  : ID!
+    id                  : Bytes!
 
     "Timestamp when the transaction was executed"
     timestamp           : BigInt
@@ -94,8 +94,8 @@ type Transaction @entity {
     "Present if the transaction is from a Safe module (in this case some other fields won't be available as not all fields are used in the Safe module context)"
     module              : Bytes
 
-    "Wallet parent"
-    wallet              : Wallet! @derivedFrom(field: "transactions")
+    "Safe{Wallet} parent"
+    wallet              : Wallet!
 }
 
 enum TransactionStatus {

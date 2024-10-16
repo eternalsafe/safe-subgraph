@@ -48,7 +48,7 @@ describe("handleExecTransaction tests", () => {
       ethereum.Value.fromBytes(Bytes.fromHexString("0x0000000000000000000000000000000000000000000000000000000000000000")),
     ]);
 
-    let wallet = new Wallet(normalSafe.toHex());
+    let wallet = new Wallet(normalSafe);
     wallet.creator = Address.fromString(
       "0xB6BdD4F0839eF6791eC1c77Cf29B10592d514624"
     );
@@ -69,7 +69,6 @@ describe("handleExecTransaction tests", () => {
     ]);
     wallet.threshold = BigInt.fromI32(1);
     wallet.currentNonce = BigInt.fromI32(1);
-    wallet.transactions = [];
     wallet.save();
 
     let call = changetype<ExecTransactionCall>(newMockCall());
@@ -124,7 +123,7 @@ describe("handleExecTransaction tests", () => {
     );
     createMockedFunction(brokenSafe, "nonce", "nonce():(uint256)").reverts();
 
-    let wallet = new Wallet(brokenSafe.toHex());
+    let wallet = new Wallet(brokenSafe);
     wallet.creator = Address.fromString(
       "0xB6BdD4F0839eF6791eC1c77Cf29B10592d514624"
     );
@@ -145,7 +144,6 @@ describe("handleExecTransaction tests", () => {
     ]);
     wallet.threshold = BigInt.fromI32(1);
     wallet.currentNonce = zeroBigInt();
-    wallet.transactions = [];
     wallet.save();
 
     let call = changetype<ExecTransactionCall>(newMockCall());
@@ -202,7 +200,7 @@ describe("handleExecTransaction tests", () => {
       ethereum.Value.fromBytes(Bytes.fromHexString("0x")),
     ]);
 
-    let wallet = new Wallet(brokenSafe.toHex());
+    let wallet = new Wallet(brokenSafe);
     wallet.creator = Address.fromString(
       "0xfA54B4085811aef6ACf47D51B05FdA188DEAe28b"
     );
@@ -227,7 +225,6 @@ describe("handleExecTransaction tests", () => {
     ]);
     wallet.threshold = BigInt.fromI32(3);
     wallet.currentNonce = zeroBigInt();
-    wallet.transactions = [];
     wallet.save();
 
     let call = changetype<ExecTransactionCall>(newMockCall());

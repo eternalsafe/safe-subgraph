@@ -36,14 +36,28 @@ import {
 export function handleChangedMasterCopy(event: ChangedMasterCopy): void {
   let walletAddr = event.address;
   let safeInstance = GnosisSafe.bind(walletAddr);
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     wallet.singleton = event.params.singleton;
 
     // it would be nice if we could change the data source for the wallet at this point from Safe to SafeL2 but it doesn't seem to be possible
     let maybeL2 = isL2Wallet(event.params.singleton) ? "+L2" : "";
-    wallet.version = safeInstance.VERSION() + maybeL2;
+
+    let version = improved_try_VERSION(safeInstance);
+    if (version.isEmpty) {
+      log.warning(
+        "handleChangedMasterCopy::Wallet: {} transaction {} - cannot get VERSION (empty bytes)",
+        [walletAddr.toHexString(), event.transaction.hash.toHexString()]
+      );
+    } else if (version.reverted) {
+      log.warning(
+        "handleChangedMasterCopy::Wallet: {} transaction {} - cannot get VERSION (reverted)",
+        [walletAddr.toHexString(), event.transaction.hash.toHexString()]
+      );
+    } else {
+      wallet.version = version.value + maybeL2;
+    }
 
     wallet.save();
   } else {
@@ -55,7 +69,7 @@ export function handleChangedMasterCopy(event: ChangedMasterCopy): void {
 
 export function handleAddedOwner(event: AddedOwner): void {
   let walletAddr = event.address;
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     let owners = wallet.owners;
@@ -71,7 +85,7 @@ export function handleAddedOwner(event: AddedOwner): void {
 
 export function handleRemovedOwner(event: RemovedOwner): void {
   let walletAddr = event.address;
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     let owners = wallet.owners;
@@ -90,7 +104,7 @@ export function handleRemovedOwner(event: RemovedOwner): void {
 
 export function handleChangedThreshold(event: ChangedThreshold): void {
   let walletAddr = event.address;
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     wallet.threshold = event.params.threshold;
@@ -106,7 +120,7 @@ export function handleExecutionFromModuleSuccess(
   event: ExecutionFromModuleSuccess
 ): void {
   let walletAddr = event.address;
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     let transaction = getTransaction(walletAddr, event.transaction.hash);
@@ -116,9 +130,6 @@ export function handleExecutionFromModuleSuccess(
     transaction.hash = event.transaction.hash;
     transaction.timestamp = event.block.timestamp;
     transaction.save();
-
-    wallet = addTransactionToWallet(<Wallet>wallet, transaction);
-    wallet.save();
   } else {
     log.warning("handleExecutionFromModuleSuccess::Wallet {} not found", [
       walletAddr.toHexString(),
@@ -130,7 +141,7 @@ export function handleExecutionFromModuleFailure(
   event: ExecutionFromModuleFailure
 ): void {
   let walletAddr = event.address;
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     let transaction = getTransaction(walletAddr, event.transaction.hash);
@@ -151,7 +162,7 @@ export function handleExecTransactionFromModule(
   call: ExecTransactionFromModuleCall
 ): void {
   let walletAddr = call.to;
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     let transaction = getTransaction(walletAddr, call.transaction.hash);
@@ -162,9 +173,6 @@ export function handleExecTransactionFromModule(
     transaction.operation =
       call.inputs.operation == 0 ? "CALL" : "DELEGATE_CALL";
     transaction.save();
-
-    wallet = addTransactionToWallet(<Wallet>wallet, transaction);
-    wallet.save();
   } else {
     log.warning("handleExecTransactionFromModule::Wallet {} not found", [
       walletAddr.toHexString(),
@@ -176,7 +184,7 @@ export function handleSafeModuleTransaction(
   event: SafeModuleTransaction
 ): void {
   let walletAddr = event.address;
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     let transaction = getTransaction(walletAddr, event.transaction.hash);
@@ -187,9 +195,6 @@ export function handleSafeModuleTransaction(
     transaction.operation =
       event.params.operation == 0 ? "CALL" : "DELEGATE_CALL";
     transaction.save();
-
-    wallet = addTransactionToWallet(<Wallet>wallet, transaction);
-    wallet.save();
   } else {
     log.warning("handleSafeModuleTransaction::Wallet {} not found", [
       walletAddr.toHexString(),
@@ -199,7 +204,7 @@ export function handleSafeModuleTransaction(
 
 export function handleExecutionSuccess(event: ExecutionSuccess): void {
   let walletAddr = event.address;
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     let transaction = getTransaction(walletAddr, event.params.txHash);
@@ -210,9 +215,6 @@ export function handleExecutionSuccess(event: ExecutionSuccess): void {
     transaction.txHash = event.params.txHash;
     transaction.payment = event.params.payment;
     transaction.save();
-
-    wallet = addTransactionToWallet(<Wallet>wallet, transaction);
-    wallet.save();
   } else {
     log.warning("handleExecutionSuccess::Wallet {} not found", [
       walletAddr.toHexString(),
@@ -222,7 +224,7 @@ export function handleExecutionSuccess(event: ExecutionSuccess): void {
 
 export function handleExecutionFailure(event: ExecutionFailure): void {
   let walletAddr = event.address;
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     let transaction = getTransaction(walletAddr, event.params.txHash);
@@ -233,9 +235,6 @@ export function handleExecutionFailure(event: ExecutionFailure): void {
     transaction.txHash = event.params.txHash;
     transaction.payment = event.params.payment;
     transaction.save();
-
-    wallet = addTransactionToWallet(<Wallet>wallet, transaction);
-    wallet.save();
   } else {
     log.warning("handleExecutionFailure::Wallet {} not found", [
       walletAddr.toHexString(),
@@ -284,28 +283,46 @@ export function handleSafeMultiSigTransaction(
  */
 
 function getTransaction(wallet: Address, transctionHash: Bytes): Transaction {
-  let id = crypto.keccak256(concat(wallet, transctionHash));
+  let id = Bytes.fromByteArray(
+    crypto.keccak256(concat(wallet, transctionHash))
+  );
 
-  let transaction = Transaction.load(id.toHexString());
+  let transaction = Transaction.load(id);
   if (transaction == null) {
-    transaction = new Transaction(id.toHexString());
+    transaction = new Transaction(id);
+    transaction.wallet = wallet;
   }
 
   return transaction as Transaction;
 }
 
-function addTransactionToWallet(
-  wallet: Wallet,
-  transaction: Transaction
-): Wallet {
-  let transactions = wallet.transactions;
-
-  if (transactions.indexOf(transaction.id) == -1) {
-    transactions.push(transaction.id);
-    wallet.transactions = transactions;
+/**
+ * Improved version of the GnosisSafe.try_VERSION function which handles the case where
+ * the version is empty bytes.
+ * @param walletInstance A GnosisSafe contract instance
+ * @returns ImprovedCallResult<string>
+ */
+function improved_try_VERSION(
+  walletInstance: GnosisSafe
+): ImprovedCallResult<string> {
+  let result = walletInstance.tryCall("VERSION", "VERSION():(string)", []);
+  if (result.reverted) {
+    return new ImprovedCallResult();
   }
 
-  return wallet;
+  let value = result.value;
+  if (
+    value[0].kind == ethereum.ValueKind.STRING &&
+    value[0].toString().length == 0
+  ) {
+    // consider a version of 0 length as a non-existent version
+    // this can happen when Safes are bricked
+    // e.g. This random Safe:
+    // https://etherscan.io/address/0xec34bf8f41bc951071a501502e1e60af0cc9f9d6
+    return ImprovedCallResult.emptyValue<string>();
+  }
+
+  return ImprovedCallResult.fromValue(value[0].toString());
 }
 
 /**
@@ -351,7 +368,7 @@ function handleTransaction(
   refundReceiver: Address,
   signatures: Bytes
 ): void {
-  let wallet = Wallet.load(walletAddr.toHex());
+  let wallet = Wallet.load(walletAddr);
 
   if (wallet != null) {
     let walletInstance = GnosisSafe.bind(walletAddr);
@@ -399,6 +416,7 @@ function handleTransaction(
           ]
         );
       }
+
       transaction.value = value;
       transaction.to = to;
       transaction.signatures = signatures;
@@ -411,7 +429,6 @@ function handleTransaction(
       transaction.refundReceiver = refundReceiver;
       transaction.save();
 
-      wallet = addTransactionToWallet(<Wallet>wallet, transaction);
       wallet.currentNonce = currentNonce.value;
       wallet.save();
     }
