@@ -1,15 +1,13 @@
-import { Address, Bytes, ethereum, BigInt, log } from "@graphprotocol/graph-ts";
+import { Address, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import {
   describe,
   test,
   clearStore,
   createMockedFunction,
   afterEach,
-  newMockCall,
   newMockEvent,
   assert,
 } from "matchstick-as/assembly/index";
-import { Wallet } from "../generated/schema";
 import { ProxyCreation as ProxyCreation_v1_1_1 } from "../generated/GnosisSafeProxyFactory_v1_1_1/GnosisSafeProxyFactory";
 import { ProxyCreation as ProxyCreation_v1_3_0 } from "../generated/GnosisSafeProxyFactory_v1_3_0/GnosisSafeProxyFactory";
 import { ProxyCreation as ProxyCreation_v1_4_1 } from "../generated/SafeProxyFactory_v1_4_1/SafeProxyFactory";

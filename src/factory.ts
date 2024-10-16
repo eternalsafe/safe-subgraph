@@ -42,7 +42,7 @@ function handleProxyCreation(
 
     let maybeL2 = isL2 ? "+L2" : "";
 
-    let wallet = new Wallet(walletAddress.toHex());
+    let wallet = new Wallet(walletAddress);
     wallet.creator = event.transaction.from;
     wallet.network = dataSource.network();
     wallet.timestamp = event.block.timestamp;
@@ -56,7 +56,6 @@ function handleProxyCreation(
     // TODO: check if this impacts the nonce
     // TODO: index the first transaction
     wallet.currentNonce = zeroBigInt();
-    wallet.transactions = [];
     wallet.save();
 
     // Instantiate a new datasource for the Safe{Wallet}
