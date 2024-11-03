@@ -1,5 +1,5 @@
 type Wallet @entity {
-    "Unique identifier of the wallet (lowercase Safe{Wallet} address) TODO: check if lowercase is still needed" 
+    "Unique identifier of the wallet (Safe{Wallet} address)"
     id                  : Bytes!
 
     "Address that created the contract"

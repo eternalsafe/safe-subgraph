@@ -71,7 +71,7 @@
       "startBlock": 40683009
     }
   },
-  "arbitrum": {
+  "arbitrum-one": {
     "GnosisSafeProxyFactory_v1_1_1": {
       "address": "0x0000000000000000000000000000000000000000",
       "startBlock": 99258141

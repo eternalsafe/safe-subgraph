@@ -10,7 +10,7 @@ All L1 and L2 networks which are supported by Eternal Safe and The Graph network
 - Gnosis Chain (`gnosis`): TODO
 - Polygon (`matic`): TODO
 - BNB Chain (`bsc`): TODO
-- Arbitrum (`arbitrum`): TODO
+- Arbitrum One (`arbitrum-one`): TODO
 - Optimism (`optimism`): TODO
 - Base (`base`): TODO
 - Celo (`celo`): TODO
