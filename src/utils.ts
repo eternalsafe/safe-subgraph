@@ -55,6 +55,15 @@ export function isL2Wallet(singleton: Address): bool {
   return L2Singletons.includes(singleton);
 }
 
+export function onlySupportsEventHandlers(network: string): bool {
+  return (
+    network == "optimism" ||
+    network == "base" ||
+    network == "celo" ||
+    network == "avalanche"
+  );
+}
+
 /**
  * An improved version of the CallResult type from the graph-ts library.
  * This type allows for a reverted call to be distinguished from a call that

@@ -35,9 +35,13 @@ There are two commonly used deployments of the v1.3.0 factory. Both are indexed.
 
 #### L2 Safes
 
-On any L2, it's possible that there is both the original (in a sense that it is the same as  the original contract deployed to L1) [Safe](https://github.com/safe-global/safe-smart-account/blob/main/contracts/Safe.sol) contract and the [SafeL2](https://github.com/safe-global/safe-smart-account/blob/main/contracts/SafeL2.sol#L10) contract. This subgraph supports both contracts, via the same instance, but with two different data sources. This means you can query `Safe` and `SafeL2` wallets in the same way with the same GraphQL queries against one endpoint, even though they are indexed differently in _The Graph_.
+On any L2, it's possible that there is both the original (in a sense that it is the same as the original contract deployed to L1) [Safe](https://github.com/safe-global/safe-smart-account/blob/main/contracts/Safe.sol) contract and the [SafeL2](https://github.com/safe-global/safe-smart-account/blob/main/contracts/SafeL2.sol#L10) contract. This subgraph supports both contracts, via the same instance, but with two different data sources. This means you can query `Safe` and `SafeL2` wallets in the same way with the same GraphQL queries against one endpoint, even though they are indexed differently in _The Graph_.
 
 The data sources are defined in [subgraph.yaml](subgraph.yaml) as `templates` and are named accordingly `Safe` and `SafeL2`. The `SafeL2` data source is more efficient because it reads the data from events emitted from the corresponding contract, whereas the `Safe` data source must rely on call handlers in lieu of the contract not emitting events. The subgraph will automatically detect whether the new safe is of a `Safe` or `SafeL2` instance based on the known `SafeL2` singleton deployment address. However, if a new `SafeL2` singleton is deployed that this subgraph does not know about, the subgraph will fall back to using `Safe` data source and its call handler to ensure it reads all the information from the safe, no matter whether it emits events or not. This is not a problem as `SafeL2` safes can still be indexed via the call handler rather than the event handler, it's just less efficient.
+
+#### Call Handlers Unsupported Networks
+
+Certain networks are not backed by RPC nodes which support `trace_filter` and therefore do not support call handlers. Namely, the following networks: `optimism`, `base`, `celo` and `avalanche`. For these networks, only event handlers are supported and therefore Safes which use the original `Safe` contract will not be indexed, only Safes which use the `SafeL2` contract.
 
 ## Prerequiste
 
