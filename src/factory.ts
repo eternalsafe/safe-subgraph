@@ -14,7 +14,7 @@ import {
   Address,
   ethereum,
 } from "@graphprotocol/graph-ts";
-import { isL2Wallet, zeroBigInt } from "./utils";
+import { isL2Wallet, onlySupportsEventHandlers, zeroBigInt } from "./utils";
 
 /**
  * Get the singleton address from the proxy creation transaction input data
@@ -62,7 +62,15 @@ function handleProxyCreation(
     if (isL2) {
       SafeL2Contract.create(walletAddress);
     } else {
-      SafeContract.create(walletAddress);
+      if (onlySupportsEventHandlers(dataSource.network())) {
+        // some networks don't support call handlers (due to no support for the trace_filter RPC method), so Safes using the original L1 contract cannot be indexed on that network
+        log.warning(
+          "handleProxyCreation::Wallet {} is a L1 Safe but this network only supports event handlers, so it will not be indexed (tx: {})",
+          [walletAddress.toHexString(), event.transaction.hash.toHexString()]
+        );
+      } else {
+        SafeContract.create(walletAddress);
+      }
     }
   } else {
     // A wallet can be instantiated from the proxy with incorrect setup values
