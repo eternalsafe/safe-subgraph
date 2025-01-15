@@ -46,7 +46,7 @@ Certain networks are not backed by RPC nodes which support `trace_filter` and th
 ## Prerequiste
 
 - yarn
-- graph-cli
+- graph-cli `>= 0.94.0`
 
 ```
 $ yarn global add @graphprotocol/graph-cli

@@ -48,12 +48,12 @@ done
 
 eval set -- "$PARAMS"
 
-graph auth --studio $ACCESS_TOKEN
+graph auth $ACCESS_TOKEN
 
 if [ $DEBUG -eq "1" ]; then
-    graph deploy --studio $PROJECT_ID --network $NETWORK --debug-fork $DEBUG_FORK
+    graph deploy $PROJECT_ID --network $NETWORK --debug-fork $DEBUG_FORK
 else
-    graph deploy --studio $PROJECT_ID --network $NETWORK
+    graph deploy $PROJECT_ID --network $NETWORK
 fi
 
 echo "success!"
