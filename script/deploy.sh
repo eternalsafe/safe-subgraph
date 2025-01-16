@@ -7,6 +7,15 @@ DEBUG=0
 
 while (( "$#" )); do
   case "$1" in
+    -p|--project-id)
+      if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+        PROJECT_ID=$2
+        shift 2
+      else
+        echo "Error: Argument for $1 is missing" >&2
+        exit 1
+      fi
+      ;;
     -n|--network)
       if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
         NETWORK=$2
