@@ -388,6 +388,11 @@ function handleTransaction(
         ? currentNonce.value
         : currentNonce.value.minus(oneBigInt());
 
+      log.info(
+        "handleTransaction::Wallet: {} transaction {} - nonce: {}",
+        [walletAddr.toHexString(), hash.toHexString(), nonce.toString()]
+      );
+
       let txHash = walletInstance.getTransactionHash(
         to,
         value,

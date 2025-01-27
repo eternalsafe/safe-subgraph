@@ -7,6 +7,15 @@ DEBUG=0
 
 while (( "$#" )); do
   case "$1" in
+    -p|--project-id)
+      if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+        PROJECT_ID=$2
+        shift 2
+      else
+        echo "Error: Argument for $1 is missing" >&2
+        exit 1
+      fi
+      ;;
     -n|--network)
       if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
         NETWORK=$2
@@ -48,12 +57,12 @@ done
 
 eval set -- "$PARAMS"
 
-graph auth --studio $ACCESS_TOKEN
+graph auth $ACCESS_TOKEN
 
 if [ $DEBUG -eq "1" ]; then
-    graph deploy --studio $PROJECT_ID --network $NETWORK --debug-fork $DEBUG_FORK
+    graph deploy $PROJECT_ID --network $NETWORK --debug-fork $DEBUG_FORK
 else
-    graph deploy --studio $PROJECT_ID --network $NETWORK
+    graph deploy $PROJECT_ID --network $NETWORK
 fi
 
 echo "success!"

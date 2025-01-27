@@ -46,7 +46,7 @@ Certain networks are not backed by RPC nodes which support `trace_filter` and th
 ## Prerequiste
 
 - yarn
-- graph-cli
+- graph-cli `>= 0.94.0`
 
 ```
 $ yarn global add @graphprotocol/graph-cli
@@ -81,9 +81,10 @@ $ yarn test
 ## Deployment
 
 ```
-$ ./script/deploy.sh [--network (from above list)] [--access-token xxxxxxxxxxxx] [--debug xxxxxxxxxxxx]
+$ ./script/deploy.sh [--project-id xxxxxxxxxxxx] [--network (from above list)] [--access-token xxxxxxxxxxxx] [--debug xxxxxxxxxxxx]
 ```
 
+- `--project-id -p` project ID of the subgraph [optional, default: safe-subgraph]
 - `--network -n` select a target network (from above list) [optional, default: mainnet]
 - `--access-token -a` access token to deploy the subgraph [optional, default: env variable $THEGRAPH_ACCESS_TOKEN]
 - `--debug -d` ID of a remote subgraph which will be [used to seed the new subgraph](https://thegraph.com/docs/en/cookbook/subgraph-debug-forking/) [optional, default: none]
