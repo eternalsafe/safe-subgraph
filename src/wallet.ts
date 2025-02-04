@@ -393,7 +393,7 @@ function handleTransaction(
         [walletAddr.toHexString(), hash.toHexString(), nonce.toString()]
       );
 
-      let txHash = walletInstance.getTransactionHash(
+      let txHash = walletInstance.try_getTransactionHash(
         to,
         value,
         data,
@@ -405,8 +405,14 @@ function handleTransaction(
         refundReceiver,
         nonce
       );
-
-      let transaction = getTransaction(walletAddr, txHash);
+      if(txHash.reverted) {
+        log.warning(
+          "handleTransaction::Wallet: {} transaction {} - getTransactionHash rpc call failed",
+          [walletAddr.toHexString(), hash.toHexString()]
+        );
+        return;
+      }
+      let transaction = getTransaction(walletAddr, txHash.value);
 
       if (data.length < 2700) {
         // max size of a column. In some very rare cases, the method data bytecode is very long
